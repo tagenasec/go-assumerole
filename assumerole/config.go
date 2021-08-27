@@ -15,6 +15,7 @@ type AssumeRole struct {
 }
 
 func NewAssumeRoleFromProfileName(profileName string) (*AssumeRole, error) {
+	log.WithField("profile", profileName).Info("Configuring using profile name")
 	awsConfig, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithSharedConfigProfile(profileName))
 	if err != nil {

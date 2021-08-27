@@ -16,6 +16,7 @@ func (self *AssumeRole) RoleArnFromRoleNameInThisAccount(roleName string) (strin
 	callerIdentity, err := self.stsSvc.GetCallerIdentity(context.TODO(), &sts.GetCallerIdentityInput{})
 	if err != nil {
 		log.WithError(err).Error("Unable to get caller identity")
+		return "", err
 	}
 	return RoleArnFromAccountAndRoleName(*callerIdentity.Account, roleName), nil
 }
