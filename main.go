@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	"github.com/apex/log"
 	"github.com/pkg/errors"
@@ -29,7 +30,15 @@ func main() {
 				log.WithError(err).Error("Unable to create assume role object")
 				return err
 			}
-			err = assumeRole.AssumeRoleInThisAccountAndOpenShell(role)
+			if !strings.HasPrefix(role, "arn:") {
+				roleArn, err := assumeRole.RoleArnFromRoleNameInThisAccount(role)
+				if err != nil {
+					log.WithError(err).Error("Unable to get role arn")
+					return err
+				}
+				role = roleArn
+			}
+			err = assumeRole.AssumeRoleAndOpenShell(role)
 			if err != nil {
 				log.WithError(err).Error("Assume operation failed")
 				return err

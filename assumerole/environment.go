@@ -27,12 +27,7 @@ func SetEnvironmentForAssumedRole(assumedRole *sts.AssumeRoleOutput) error {
 	return nil
 }
 
-func (self *AssumeRole) AssumeRoleInThisAccountAndOpenShell(roleName string) error {
-	roleArn, err := self.RoleArnFromRoleNameInThisAccount(roleName)
-	if err != nil {
-		log.WithError(err).Error("Unable to get role arn")
-		return err
-	}
+func (self *AssumeRole) AssumeRoleAndOpenShell(roleArn string) error {
 	credentials, err := self.AssumeRoleArn(roleArn)
 	if err != nil {
 		log.WithError(err).Error("Unable to assume role")
